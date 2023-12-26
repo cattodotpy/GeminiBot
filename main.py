@@ -75,7 +75,7 @@ logger.addHandler(file_handler)
 class GeminiBot(commands.Bot):
     def __init__(self, cogs: list[str] = ["cogs.chat"]) -> None:
         super().__init__(
-            command_prefix=commands.when_mentioned_or(config["prefix"]),
+            command_prefix=config["prefix"],
             intents=intents,
             help_command=None,
         )

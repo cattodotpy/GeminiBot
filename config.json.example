@@ -9,5 +9,6 @@
         "",
         "Here's your environment",
         ""
-    ]
+    ],
+    "invite_url": "discord_bot_invite_url",
 }

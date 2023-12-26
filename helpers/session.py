@@ -55,7 +55,7 @@ class Session:
         self.session = aiohttp.ClientSession()
         self.history = [
             await build_content(
-                self.bot.config["initial_prompt"].format(
+                "\n".join(self.bot.config["initial_prompt"]).format(
                     self.bot.user.name, self.bot.config.get("owner", "unknown")
                 )
                 + visualize_dict(self.environment),
