@@ -70,7 +70,27 @@ class Chat(commands.Cog):
             await message.delete()
 
         await ctx.send(f"Deleted {amount} messages.")
-            
+
+    @commands.is_owner()
+    @commands.command()
+    async def history(self, ctx: commands.Context, user: discord.User = None):
+        """
+        Shows the history of the current session.
+        """
+        if user is None:
+            user = ctx.author
+
+        session: Session = self.sessions.get(user.id, None)
+        if session is None:
+            await ctx.send("You have no active session.")
+            return
+
+        resp = f"History of **{user.name}**:\n\n"
+
+        for message in session.history:
+            resp += f"**{message['role']}**: {message['parts'][0]['text']}\n"
+
+        await ctx.send(resp)
 
         
 async def setup(bot: GeminiBot):

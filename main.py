@@ -18,6 +18,7 @@ else:
 
 intents = discord.Intents.all()
 
+
 class LoggingFormatter(logging.Formatter):
     # Colors
     black = "\x1b[30m"
@@ -77,6 +78,8 @@ class GeminiBot(commands.Bot):
         self.logger = logger
         self.config = config
         self.cogs_to_load = cogs
+        self.owner_ids = (config.get("developers", []))
+        self.error_channel = None
 
     async def setup_hook(self) -> None:
         """
@@ -104,6 +107,17 @@ class GeminiBot(commands.Bot):
                 f"Executed {executed_command} command by {context.author} (ID: {context.author.id}) in DMs"
             )
 
+    async def on_command_error(self, context: Context, exception) -> None:
+        if isinstance(exception, commands.CommandNotFound) or isinstance(exception, commands.CheckFailure):
+            pass
+        else:
+            context.reply(f"An error occurred: {exception}")
+            if self.error_channel:
+                await self.error_channel.send(
+                    f"An error occurred in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id})\n```{exception}```"
+                )
+
+
     async def load_cogs(self):
         for cog in self.cogs_to_load:
             try:
@@ -114,10 +128,14 @@ class GeminiBot(commands.Bot):
 
     async def on_ready(self) -> None:
         await self.change_presence(activity=discord.Game(name="@GeminiBot help"))
+        self.error_channel = self.get_channel(self.config.get("error_channel", 0))
         print(f"{self.user.name} is ready.")
+
+
 load_dotenv()
 
 bot = GeminiBot()
+
 
 def assert_config():
     assert "prefix" in config, "No prefix specified in config.json"
@@ -125,14 +143,19 @@ def assert_config():
     assert "blacklist" in config, "No blacklist specified in config.json"
     assert "initial_prompt" in config, "Initial prompt missing in config.json"
 
+
 def assert_env():
     assert "BOT_TOKEN" in os.environ, "No BOT_TOKEN specified in environment variables"
-    assert "GEMINI_API_KEY" in os.environ, "No GEMINI_API_KEY specified in environment variables"
+    assert (
+        "GEMINI_API_KEY" in os.environ
+    ), "No GEMINI_API_KEY specified in environment variables"
+
 
 def main():
     assert_config()
     assert_env()
     bot.run(os.environ["BOT_TOKEN"])
+
 
 if __name__ == "__main__":
     main()
