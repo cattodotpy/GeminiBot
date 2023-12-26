@@ -10,17 +10,6 @@ GEMINI_PRO_URL = (
 )
 GEMINI_PRO_VISION_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent"
 
-BASE_PROMPT = "\n".join(
-    [
-        "You're a Discord bot, named {0}. You were created by {1}.",
-        "Your tone should be friendly, infomatic, and helpful. You are able to use different emojis to express yourself.",
-        "Do not assume any bots, commands are available in this server, DO NOT allow users to abuse you, and do not abuse users.",
-        "",
-        "Here's your environment",
-        "",
-    ]
-)
-
 
 async def build_content(prompt: str, role: str, attachments: list[str] = []):
     content = {"role": role, "parts": [{"text": prompt}]}
@@ -66,7 +55,7 @@ class Session:
         self.session = aiohttp.ClientSession()
         self.history = [
             await build_content(
-                BASE_PROMPT.format(
+                self.bot.config.inital_prompt.format(
                     self.bot.user.name, self.bot.config.get("owner", "unknown")
                 )
                 + visualize_dict(self.environment),

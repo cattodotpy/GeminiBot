@@ -21,15 +21,13 @@ cd GeminiBot
 ```sh
 pip install -r requirements.txt
 ```
-1. Create a [`.env`] file in the root directory and add your Discord bot token and Gemini API key:
-```sh
-BOT_TOKEN=your-bot-token
-GEMINI_API_KEY=your-gemini-api-key
-```
-1. Run the bot:
-```sh
-python main.py
-```
+1. Rename the `config.example.json` file to `config.json`.
+- Prefix: The prefix used to invoke the bot's commands.
+- Owner: The name of the bot's owner(Will be used for initial prompt).
+- Initial Prompt: The initial prompt used to give context to the bot's responses. If you want to add more varibles to the prompt, you can do so by adding {2} for the second varible, {3} for the third varible, and so on. After adding the varibles, you are required to add the varibles to `helpers/session.py` line 59.
+
+1. Rename the `.env.example` file to `.env` 
+Fill in your [Discord bot token](https://discord.com/developers/applications), [Gemini API key](https://ai.google.dev/).
 
 ## Usage
 
