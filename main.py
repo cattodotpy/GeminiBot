@@ -89,6 +89,7 @@ class GeminiBot(commands.Bot):
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
         self.logger.info("-------------------")
+        self.change_presence(activity=discord.Game(name="@GeminiBot help"))
         await self.load_cogs()
 
     async def on_command_completion(self, context: Context) -> None:

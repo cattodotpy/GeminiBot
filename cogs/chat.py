@@ -20,6 +20,9 @@ class Chat(commands.Cog):
         if not message.content.startswith(self.bot.user.mention) and (message.reference is None or message.reference.message_id not in self.messages):
             return
         
+        if message.channel.type == discord.ChannelType.private:
+            return await message.channel.send("Please use me in a server, not in DMs.")
+        
         if message.author.id in self.sessions:
             session = self.sessions[message.author.id]
         else :
