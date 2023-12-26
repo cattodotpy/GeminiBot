@@ -56,7 +56,7 @@ class Session:
         self.history = [
             await build_content(
                 "\n".join(self.bot.config["initial_prompt"]).format(
-                    self.bot.user.name, self.bot.config.get("owner", "unknown")
+                    self.bot.user.name, self.bot.config.get("owner", "unknown"), self.bot.config.get("prefix")
                 )
                 + visualize_dict(self.environment),
                 "user",

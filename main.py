@@ -89,7 +89,6 @@ class GeminiBot(commands.Bot):
             f"Running on: {platform.system()} {platform.release()} ({os.name})"
         )
         self.logger.info("-------------------")
-        self.change_presence(activity=discord.Game(name="@GeminiBot help"))
         await self.load_cogs()
 
     async def on_command_completion(self, context: Context) -> None:
@@ -114,7 +113,8 @@ class GeminiBot(commands.Bot):
                 traceback.print_exc()
 
     async def on_ready(self) -> None:
-        print("Ready.")
+        await self.change_presence(activity=discord.Game(name="@GeminiBot help"))
+        print(f"{self.user.name} is ready.")
 load_dotenv()
 
 bot = GeminiBot()
