@@ -1,6 +1,8 @@
 # GeminiBot
 GeminiBot is a Discord bot built with Python using the discord.py library. It is designed to be friendly, informative, and helpful, and can use different emojis to express itself. The bot is equipped with a chat feature using Google's Gemini AI that allows it to interact with users in a friendly and informative manner.
 
+[Invite Link 🔗](https://discord.com/api/oauth2/authorize?client_id=1189151964953575496&permissions=92224&scope=bot%20applications.commands) [Support Server 📜](https://discord.com/invite/MhePKwDAfA)
+
 ## Features
 
 - Chat: The bot can interact with users in a friendly and informative manner.
