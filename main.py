@@ -127,6 +127,7 @@ def assert_config():
     assert "prefix" in config, "No prefix specified in config.json"
     assert "owner" in config, "No owner specified in config.json"
     assert "blacklist" in config, "No blacklist specified in config.json"
+    assert "initial_prompt" in config, "Initial prompt missing in config.json"
 
 def assert_env():
     assert "BOT_TOKEN" in os.environ, "No BOT_TOKEN specified in environment variables"
