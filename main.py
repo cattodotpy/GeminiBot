@@ -16,12 +16,7 @@ else:
         config = json.load(file)
 
 
-intents = discord.Intents.default()
-
-intents.members = True
-intents.presences = True
-intents.guilds = True
-intents.messages = True
+intents = discord.Intents.all()
 
 class LoggingFormatter(logging.Formatter):
     # Colors
@@ -73,7 +68,7 @@ logger.addHandler(file_handler)
 
 
 class GeminiBot(commands.Bot):
-    def __init__(self, cogs: list[str] = ["cogs.chat"]) -> None:
+    def __init__(self, cogs: list[str] = ["cogs.chat", "cogs.help"]) -> None:
         super().__init__(
             command_prefix=config["prefix"],
             intents=intents,
