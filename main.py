@@ -69,7 +69,9 @@ logger.addHandler(file_handler)
 
 
 class GeminiBot(commands.Bot):
-    def __init__(self, cogs: list[str] = ["cogs.chat", "cogs.help"]) -> None:
+    def __init__(
+        self, cogs: list[str] = ["cogs.chat", "cogs.help", "cogs.events"]
+    ) -> None:
         super().__init__(
             command_prefix=commands.when_mentioned_or(config["prefix"]),
             intents=intents,
@@ -78,8 +80,9 @@ class GeminiBot(commands.Bot):
         self.logger = logger
         self.config = config
         self.cogs_to_load = cogs
-        self.owner_ids = (config.get("developers", []))
+        self.owner_ids = config.get("developers", [])
         self.error_channel = None
+        self.log_channel = None
 
     async def setup_hook(self) -> None:
         """
@@ -108,15 +111,16 @@ class GeminiBot(commands.Bot):
             )
 
     async def on_command_error(self, context: Context, exception) -> None:
-        if isinstance(exception, commands.CommandNotFound) or isinstance(exception, commands.CheckFailure):
+        if isinstance(exception, commands.CommandNotFound) or isinstance(
+            exception, commands.CheckFailure
+        ):
             pass
         else:
-            context.reply(f"An error occurred: {exception}")
+            await context.reply(f"An error occurred: {exception}")
             if self.error_channel:
                 await self.error_channel.send(
                     f"An error occurred in {context.guild.name} (ID: {context.guild.id}) by {context.author} (ID: {context.author.id})\n```{exception}```"
                 )
-
 
     async def load_cogs(self):
         for cog in self.cogs_to_load:
@@ -128,7 +132,20 @@ class GeminiBot(commands.Bot):
 
     async def on_ready(self) -> None:
         await self.change_presence(activity=discord.Game(name="@GeminiBot help"))
-        self.error_channel = self.get_channel(self.config.get("error_channel", 0))
+        try:
+            self.log_channel = await self.fetch_channel(
+                self.config.get("log_channel", 0)
+            )
+        except:
+            self.logger.error(f"Failed to fetch log channel.")
+
+        try:
+            self.error_channel = await self.fetch_channel(
+                self.config.get("error_channel", 0)
+            )
+
+        except:
+            self.logger.error(f"Failed to fetch error channel.")
         print(f"{self.user.name} is ready.")
 
 

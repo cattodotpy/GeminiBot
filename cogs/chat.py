@@ -32,8 +32,15 @@ class Chat(commands.Cog):
 
         async with message.channel.typing():
             response = await session.send(message.content, message.attachments)
+        if len(response) > 2000:
+            split = response[:2000].rsplit("\n", 1)
+            m = await message.reply(split[0])
+            await m.reply(split[1])
+        else:
+            await message.channel.send(response)
 
-        message = await message.reply(response)
+        if self.bot.log_channel:
+            await self.bot.log_channel.send(f"Message sent by {message.author} (ID: {message.author.id}) in {message.guild.name} (ID: {message.guild.id})\n```{message.clean_content}```")
 
         self.messages.append(message.id)
 
@@ -47,7 +54,7 @@ class Chat(commands.Cog):
         await ctx.send("Reset your session.")
 
     @commands.command()
-    async def delete_last(self, ctx: commands.Context, amount: int = 1):
+    async def delete(self, ctx: commands.Context, amount: int = 1):
         """
         Deletes the last message sent by the bot.
         """

@@ -56,7 +56,7 @@ class Session:
         self.history = [
             await build_content(
                 "\n".join(self.bot.config["initial_prompt"]).format(
-                    self.bot.user.name, self.bot.config.get("owner", "unknown"), self.bot.config.get("prefix")
+                    self.bot.user.name, self.bot.config.get("owner", "unknown"), self.bot.config.get("prefix"), self.bot.config.get("commands")
                 )
                 + visualize_dict(self.environment),
                 "user",
@@ -73,7 +73,7 @@ class Session:
         return self
 
     async def send(self, message: str, attachments: list[discord.Attachment] = None):
-        print(self.history)
+        # print(self.history)
         if attachments:
             self.history.append(await build_content(message, "user"))
             data = {"parts": [{"text": message}]}
@@ -112,7 +112,7 @@ class Session:
     async def resolve_response(self, response: aiohttp.ClientResponse):
         self.request_history.append(response)
         data = await response.json()
-        print(data)
+        # print(data)
         if response.status != 200:
             self.history.pop()
             base = "An error occured while processing your request. Please try again later."
